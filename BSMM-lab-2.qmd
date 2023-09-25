@@ -1,8 +1,8 @@
 ---
 title: "BSMM-lab-2"
 subtitle: "BSMM 8740 Fall 2023"
-author: "Add your name here"
-date: "Add the date here"
+author: "Mahroosa Ibtesaam"
+date: "25-09-2023"
 format: html
 editor: visual
 self-contained: true
@@ -21,6 +21,38 @@ the_tate_artists <- readr::read_csv("data/the-tate-artists.csv")
 ## Exercises
 
 ### Exercise 1
+
+```{r}
+install.packages("dplyr")
+```
+
+```{r}
+library(dplyr)
+
+```
+
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+```
+
+```{r}
+the_tate|> dplyr::summarize(
+  artist=length(unique(artist)),
+  min_year=min(year.na.rm=TRUE),
+  max_year=max(year.na.rm=TRUE),
+  min_acqusitionYear=min(acquisitionYear,na.rm=TRUE),
+  max_acqusitionYear=max(acquisitionYear,na.rm=TRUE)
+)
+```
+
+```{r}
+the_tate |>DataExplorer::introduce()
+```
+
+```{r}
+the_tate |>DataExplorer::plot_missing()
+```
 
 The `the_tate` dataset has \_\_\_ unique artists who worked from \_\_\_ to \_\_\_. The works were acquired between the years \_\_\_ and \_\_\_.
 
