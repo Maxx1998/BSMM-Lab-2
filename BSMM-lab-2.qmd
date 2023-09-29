@@ -12,8 +12,38 @@ self-contained: true
 
 Load packages and data:
 
-```{r load-pkg-data}
-#| message: false
+```{r}
+install.packages("tidymodels")
+install.packages("gt")
+install.packages("gtExtras")
+install.packages("DataExplorer")
+```
+
+```{r}
+library(magrittr)     # the pipe
+```
+
+```{r}
+library(tidyverse)    # for data wrangling + visualization
+```
+
+```{r}
+library(tidymodels)   # for modeling
+```
+
+```{r}
+library(gt)           # for making display tables
+```
+
+```{r}
+library(gtExtras)     # helper functions for beautiful tables
+```
+
+```{r}
+library(DataExplorer) 
+```
+
+```{r}
 the_tate <- readr::read_delim("data/the-tate-collection.csv", ";", escape_double = FALSE, trim_ws = TRUE)
 the_tate_artists <- readr::read_csv("data/the-tate-artists.csv")
 ```
@@ -23,40 +53,68 @@ the_tate_artists <- readr::read_csv("data/the-tate-artists.csv")
 ### Exercise 1
 
 ```{r}
-install.packages("dplyr")
+dplyr::glimpse(the_tate)
 ```
 
 ```{r}
-library(dplyr)
-
+dplyr::glimpse(the_tate_artists)
 ```
 
 ```{r}
-install.packages("tidyverse")
-library(tidyverse)
+artists<- the_tate |>
+  dplyr::select(artist)  
+dplyr::distinct(artists)
 ```
 
 ```{r}
-the_tate|> dplyr::summarize(
-  artist=length(unique(artist)),
-  min_year=min(year.na.rm=TRUE),
-  max_year=max(year.na.rm=TRUE),
-  min_acqusitionYear=min(acquisitionYear,na.rm=TRUE),
-  max_acqusitionYear=max(acquisitionYear,na.rm=TRUE)
-)
+max(the_tate_artists$yearOfBirth, na.rm = T)
 ```
 
 ```{r}
-the_tate |>DataExplorer::introduce()
+min(the_tate_artists$yearOfDeath, na.rm=T)
 ```
 
 ```{r}
-the_tate |>DataExplorer::plot_missing()
+max(the_tate$acquisitionYear, na.rm=T)
 ```
 
-The `the_tate` dataset has \_\_\_ unique artists who worked from \_\_\_ to \_\_\_. The works were acquired between the years \_\_\_ and \_\_\_.
+```{r}
+min(the_tate$acquisitionYear, na.rm=T)
+```
+
+```{r}
+DataExplorer::introduce(the_tate)
+```
+
+```{r}
+DataExplorer::introduce(the_tate_artists)
+```
+
+```{r}
+DataExplorer::plot_missing(the_tate)
+```
+
+```{r}
+DataExplorer::plot_missing(the_tate_artists)
+```
+
+The `the_tate` dataset has 3336 unique artists who worked from 1543 to 2004. The works were acquired between the years 1823 and 2013.
 
 ### Exercise 2
+
+```{r}
+missing_dates<-
+  dplyr::filter(the_tate, is.na(the_tate$year))
+  nrow(missing_dates)
+```
+
+```{r}
+missing_dates
+```
+
+```{r}
+
+```
 
 How number of works with missing dates is \_\_.
 
