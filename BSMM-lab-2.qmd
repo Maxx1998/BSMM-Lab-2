@@ -113,16 +113,45 @@ missing_dates
 ```
 
 ```{r}
+count_missdates <- sum(is.na(the_tate$year))
+count_missdates
+```
+
+```{r}
+test1 <- missing_dates |>
+  dplyr::distinct(missing_dates$artist)
+  nrow(test1)
+```
+
+```{r}
+test1
+```
+
+```{r}
+missing_year_count <- the_tate|>
+  dplyr::filter(is.na(year)) 
+missing_year_count <- missing_year_count |>
+  group_by(artist) |>
+  summarise(missing_years = sum(is.na(year))) |>
+  arrange(desc(missing_years))
+missing_year_count <- missing_year_count |>
+  mutate(percentage = (missing_years / count_missdates) * 100) |>
+  mutate(cumulative_percentage = cumsum(percentage))
+artists_50percent <- min(which (missing_year_count$cumulative_percentage >= 50))
+artists_50percent
+```
+
+```{r}
 
 ```
 
-How number of works with missing dates is \_\_.
+How number of works with missing dates is 5397
 
-The number of artists whose works have missing dates is \_\_.
+The number of artists whose works have missing dates is 461 .
 
-It would require resolving missing year data for only \_\_ artists resolve resolve at least 50% of the missing data.
+It would require resolving missing year data for only 11 artists resolve resolve at least 50% of the missing data.
 
-The missing year data likely to be classified as \_\_\_\_.
+The missing year data likely to be classified as MAR.
 
 ### Exercise 3
 
