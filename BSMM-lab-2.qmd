@@ -242,16 +242,63 @@ The artist with the smallest work in the collection is Mesens, E.L . The smalles
 
 ### Exercise 7
 
-...
+```{r}
+the_tate_join <- the_tate|>
+  dplyr::left_join(the_tate_artists, by=c("artist" = "name"))
+```
+
+```{r}
+the_tate_join1 <-the_tate_join|>
+  dplyr::filter(!is.na(gender))
+the_tate_group <- the_tate_join1 |>
+  dplyr::group_by(gender)
+the_tate_group
+```
 
 ### Exercise 8
 
-The annual return in the SPX price in 2020 was \_\_\_%.
+```{r}
+SPXData <- read.csv("data/SPX_HistoricalData_1692322132002.csv")
+```
 
-The corresponding price volatility was \_\_\_%.
+```{r}
+SPXData <- SPXData |>
+  dplyr::mutate(year=format(as.Date(SPXData$Date, format="%m/%d/%Y"),"%Y"))
+
+SPXData <- SPXData |>
+  dplyr::rename("cl"='Close.Last')
+
+SPXData <- SPXData |>
+  dplyr::mutate(rd = log(dplyr::lead(cl)/cl))
+
+SPXData <- SPXData |>
+  dplyr::mutate(varience=rd^2)
+```
+
+```{r}
+summarydata <- SPXData |>
+  dplyr::group_by(year) |>
+  dplyr::summarize(
+    Annual_Return = (exp(sum(rd, na.rm = TRUE)) - 1)*100,
+    Annual_StdDev = sqrt(sum(varience, na.rm = TRUE))*100,
+    .groups = "drop"  
+  )
+
+
+summarydata
+```
+
+The annual return in the SPX price in 2020 was -13.9%.
+
+The corresponding price volatility was 34.7%.
 
 ### Exercise 9
 
-The period volatility was \_\_\_.\_%
+```{r}
+period_volatility <- sd(summarydata$Annual_Return)
+period_volatility
+```
+
+The period volatility was 19.52%
 
 ### 
