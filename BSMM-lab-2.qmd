@@ -175,17 +175,70 @@ The artist with the tenth-most works in the Tate collection is Warhol, Andy.
 
 ### Exercise 4
 
-The artist with the greatest number of works in the Tate collection represent \_\_\_% of the total number of works
+```{r}
+percentage_count <- (artist_work_counts$titles[1]/sum(artist_work_counts$titles))*100
+percentage_count
+```
+
+The artist with the greatest number of works in the Tate collection represent 56.9197% of the total number of works
 
 ### Exercise 5
 
-There are \_\_ duplicate artist-title pairs
+```{r}
+tate_artist_title <- the_tate |>
+  dplyr::select(artist, title)
+tate_artist_title
+```
+
+```{r}
+tate_artist_title_distinct <- distinct(tate_artist_title)
+tate_artist_title_distinct
+```
+
+```{r}
+num_of_duplicates <- count(tate_artist_title)-count(tate_artist_title_distinct)
+num_of_duplicates
+```
+
+There are 23705 duplicate artist-title pairs
 
 ### Exercise 6
 
-The artist with the largest work in the tate collection is \_\_\_
+```{r}
+install.packages("tidyr")
+```
 
-The artist with the smallest work in the collection is \_\_\_. The smallest work has area \_\_\_ $\text{cm}^2$
+```{r}
+library(tidyr)
+```
+
+```{r}
+the_tate <- the_tate |>
+  dplyr::mutate(areacm = (width*height)/100)
+```
+
+```{r}
+area_tate <- the_tate|>
+  dplyr::select(artist, title, areacm)
+area_tate <- na.omit(area_tate)
+
+desc_area_tate <- area_tate |>
+  dplyr::arrange(desc(areacm))
+
+largest_work <- desc_area_tate |>
+  dplyr::slice_head(n=1)
+smallest_work <- desc_area_tate |>
+  dplyr::slice_tail(n=1)
+largest_work
+```
+
+```{r}
+smallest_work
+```
+
+The artist with the largest work in the tate collection is Therrien, Robert
+
+The artist with the smallest work in the collection is Mesens, E.L . The smallest work has area 2.37 $\text{cm}^2$
 
 ### Exercise 7
 
