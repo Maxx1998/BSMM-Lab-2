@@ -155,9 +155,23 @@ The missing year data likely to be classified as MAR.
 
 ### Exercise 3
 
-The artist with the most works in the Tate collection is \_\_\_.
+```{r}
+artist_work_counts <- the_tate |>
+  group_by(artist) |>
+  summarize(titles = n()) |>
+  arrange(desc(titles))
+artist_work_counts
+```
 
-The artist with the tenth-most works in the Tate collection is \_\_\_.
+```{r}
+tenth_artist <- 
+  artist_work_counts$artist[10]
+tenth_artist
+```
+
+The artist with the most works in the Tate collection is Turner, Joseph Mallord William
+
+The artist with the tenth-most works in the Tate collection is Warhol, Andy.
 
 ### Exercise 4
 
